@@ -28,6 +28,11 @@ def update_run_count():
     with open('module.py', 'w') as file_write:
         file_write.write(str(old_count[0]) + ' = ' + str(old_count[1]))
 
+# основной код программы
+def run_prog():
+    print('* Работа основного кода программы *')
+    ...
+
 
 path_to_main_file = './main.py'
 path_to_hash = './hash.txt'
@@ -35,9 +40,10 @@ path_to_hash = './hash.txt'
 
 if module.RUN_COUNT == 0:
     with open(path_to_hash, 'w') as file:
-        t = get_hash_file(path_to_main_file)
-        file.write(str(t))
-        print('Превый запуск программы, ХЭШ-сумма:', str(t))
+        t = str(get_hash_file(path_to_main_file))
+        file.write(t)
+        print('Превый запуск программы, ХЭШ-сумма:', t)
+        run_prog()
 else:
     if not os.path.exists(path_to_hash):
         print('Не найден ХЭШ-файл контрольной суммы')
@@ -50,6 +56,7 @@ else:
             print('! ХЭШ-сумма программы изменилась !')
         if os.path.exists(path_to_hash) and str(get_hash_file(path_to_main_file)) == rf:
             print('ХЭШ-сумма программы не изменилась')
+            run_prog()
 
 update_run_count()
 

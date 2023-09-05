@@ -1,0 +1,7 @@
+./Folder2/file3.txt -- b'}'
+./Folder2/file4.txt -- b'\xd9'
+./Folder3/file5.txt -- b':,'
+./Folder3/file6.txt -- b'\xd2'
+./Folder1/file2.txt -- b'V'
+./Folder1/file1.txt -- b'}E'
+./original-files.txt -- b'\xa2\xcd'

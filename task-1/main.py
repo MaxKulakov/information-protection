@@ -1,5 +1,4 @@
 import os
-import mmap
 
 CHUNK_SIZE = 2
 IGNORED_FILES = ['.DS_Store']

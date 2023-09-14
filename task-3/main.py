@@ -40,7 +40,7 @@ network_list = ['DeleteIPAddress', 'FreeMibTable', 'GetAdaptersAddresses', 'GetA
 def get_path_to_files(path):
     os.chdir(path)
     path_to_files = []
-    for root, dirs, files in os.walk(".", topdown=False):
+    for root, dirs, files in os.walk('.', topdown=False):
         for name in files:
             if str(name[-4:]).lower() in ALLOWED_FILES:
                 path_to_files.append(os.path.join(root, name))
@@ -51,7 +51,7 @@ def scan_import(pe):
     try: 
         for x in pe.DIRECTORY_ENTRY_IMPORT: 
             for y in x. imports: 
-                import_list.append((y.name).decode(" utf-8"))
+                import_list.append((y.name).decode('utf-8'))
     except Exception: pass 
     return import_list
 

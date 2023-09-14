@@ -1,9 +1,11 @@
 import os
+import mmap
+import pefile
 
 
 ALLOWED_FILES = ['.exe', '.dll']
 
-arr = ['DeleteIPAddress', 'FreeMibTable', 'GetAdaptersAddresses', 'GetAnycastIpAddressEntry', 'GetAnycastIpAddressTable', 
+network_list = ['DeleteIPAddress', 'FreeMibTable', 'GetAdaptersAddresses', 'GetAnycastIpAddressEntry', 'GetAnycastIpAddressTable', 
        'GetBestRoute2', 'GetHostNameW', 'GetIpAddrTable', 'GetIpStatisticsEx', 'GetUnicastIpAddressTable', 'IcmpCloseHandle', 
        'IcmpCreateFile', 'IcmpCloseHandle', 'IcmpSendEcho', 'MultinetGetConnectionPerformance', 'MultinetGetConnectionPerformanceW', 
        'NetAlertRaise', 'NetAlertRaiseEx', 'NetApiBufferAllocate', 'NetApiBufferFree', 'NetApiBufferReallocate', 'NetApiBufferSize', 
@@ -35,21 +37,36 @@ arr = ['DeleteIPAddress', 'FreeMibTable', 'GetAdaptersAddresses', 'GetAnycastIpA
        'WNetGetUniversalName', 'WNetGetUniversalNameW', 'WNetGetUser', 'WNetGetUserW', 'WNetOpenEnum', 'WNetOpenEnumW', 'WNetRestoreConnectionW', 
        'WNetUseConnection', 'WNetUseConnectionW']
 
+
 def get_path_to_files(path):
-    cnt = 0
     os.chdir(path)
     path_to_files = []
     for root, dirs, files in os.walk(".", topdown=False):
         for name in files:
             if str(name[-4:]).lower() in ALLOWED_FILES:
-                # os.unlink(os.path.join(root, name))
-                # print(os.path.join(root, name))
-                cnt += 1
-    print(cnt)        
+                path_to_files.append(os.path.join(root, name))
+    return path_to_files      
+
+def ScanImport(pe): 
+    import_list = []
+    try: 
+        for x in pe.DIRECTORY_ENTRY_IMPORT: 
+            for y in x. imports: 
+                import_list.append((y.name).decode(" utf-8"))
+    except Exception: pass 
+    return import_list
 
 
-# get_path_to_files('./System32')
-# str = str.split(' ')
-# print(str)
+path_to_directory = input('Введите путь до директории (./System32 по умолчанию): ') \
+                    or './System32'
 
-print(arr)
+path_to_files = get_path_to_files(path_to_directory)
+files_with_network_func = []
+
+for item in path_to_files:
+    pe = pefile.PE(item)
+    file_import_list = ScanImport(pe) 
+    c = list(set(network_list) & set(file_import_list))
+    if c:
+        print(item, '--', *c)
+        files_with_network_func.append(item)

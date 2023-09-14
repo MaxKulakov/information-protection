@@ -1,5 +1,4 @@
 import os
-import mmap
 import pefile
 
 
@@ -47,7 +46,7 @@ def get_path_to_files(path):
                 path_to_files.append(os.path.join(root, name))
     return path_to_files      
 
-def ScanImport(pe): 
+def scan_import(pe): 
     import_list = []
     try: 
         for x in pe.DIRECTORY_ENTRY_IMPORT: 
@@ -65,7 +64,7 @@ files_with_network_func = []
 
 for item in path_to_files:
     pe = pefile.PE(item)
-    file_import_list = ScanImport(pe) 
+    file_import_list = scan_import(pe) 
     c = list(set(network_list) & set(file_import_list))
     if c:
         print(item, '--', *c)
